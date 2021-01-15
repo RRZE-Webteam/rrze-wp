@@ -6,7 +6,7 @@
         "wordpress"
     ],
     "homepage": "https://github.com/RRZE-Webteam/rrze-wp",
-    "license": "GNU General Public License v2",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Rolf v. d. Forst",
