@@ -186,7 +186,7 @@ class Plugin
     public function __call(string $name, array $arguments)
     {
         if (!method_exists($this, $name)) {
-            $message = sprintf(__('Call to undefined method %1$s::%2$s', 'rrze-greetings'), __CLASS__, $name);
+            $message = sprintf(__('Call to undefined method %1$s::%2$s', 'rrze-wp'), __CLASS__, $name);
             do_action(
                 'rrze.log.error',
                 $message,
@@ -196,7 +196,7 @@ class Plugin
                     'arguments' => $arguments
                 )
             );
-            if (defined('WP_DEBUG') && WP_DEBUG) {
+            if (WP_DEBUG) {
                 throw new \Exception($message);
             }
         }
