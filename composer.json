@@ -12,11 +12,6 @@
             "name": "Rolf v. d. Forst",
             "email": "rolf.v.d.forst@fau.de",
             "homepage": "https://www.rrze.fau.de"
-        },
-        {
-            "name": "Benjamin Klemencic",
-            "email": "benjamin.klemencic@fau.de",
-            "homepage": "https://www.rrze.fau.de"
         }
     ],
     "require": {
