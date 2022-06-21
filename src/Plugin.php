@@ -8,49 +8,45 @@ class Plugin
 {
     /**
      * The full path and filename of the plugin.
-     * 
      * @var string
      */
-    protected $plugin_file;
+    protected $pluginFile;
 
     /**
      * The basename of the plugin.
-     * 
      * @var string
      */
     protected $basename;
 
     /**
      * The filesystem directory path (with trailing slash) for the plugin.
-     * 
      * @var string
      */
     protected $directory;
 
     /**
      * The URL directory path (with trailing slash) for the plugin.
-     * 
      * @var string
      */
     protected $url;
 
     /**
      * The version of the plugin.
-     * 
      * @var string
      */
     protected $version;
 
     /**
-     * @param string $plugin_file The full path and filename of the plugin.
+     * __construct method
+     * @param string $pluginFile The full path and filename of the plugin.
      */
-    public function __construct(string $plugin_file)
+    public function __construct(string $pluginFile)
     {
-        $this->plugin_file = $plugin_file;
+        $this->pluginFile = $pluginFile;
     }
 
     /**
-     * Execute on loaded hook.
+     * loaded method
      */
     public function loaded()
     {
@@ -61,142 +57,146 @@ class Plugin
     }
 
     /**
+     * getFile method
      * Get the full path and filename of the plugin.
-     * 
      * @return string The full path and filename.
      */
-    public function getFile()
+    public function getFile(): string
     {
-        return $this->plugin_file;
+        return $this->pluginFile;
     }
 
     /**
+     * getBasename method
      * Get the basename of the plugin.
-     * 
      * @return string The basename.
      */
-    public function getBasename()
+    public function getBasename(): string
     {
         return $this->basename;
     }
 
     /**
+     * setBasename method
      * Set the basename of the plugin.
-     * 
      * @return object This Plugin object.
      */
-    public function setBasename()
+    public function setBasename(): object
     {
-        $this->basename = plugin_basename($this->plugin_file);
+        $this->basename = plugin_basename($this->pluginFile);
         return $this;
     }
 
     /**
+     * getDirectory method
      * Get the filesystem directory path (with trailing slash) for the plugin.
-     * 
      * @return string The filesystem directory path.
      */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
 
     /**
+     * setDirectory method
      * Set the filesystem directory path (with trailing slash) for the plugin.
-     * 
      * @return object This Plugin object.
      */
-    public function setDirectory()
+    public function setDirectory(): object
     {
-        $this->directory = rtrim(plugin_dir_path($this->plugin_file), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->directory = rtrim(plugin_dir_path($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
     }
 
     /**
+     * getPath method
      * Get the filesystem directory path (with trailing slash) for the plugin.
-     * 
      * @param string $path The path name.
      * @return string The filesystem directory path.
      */
-    public function getPath(string $path = '')
+    public function getPath(string $path = ''): string
     {
         return $this->directory . ltrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
 
     /**
+     * getUrl method
      * Get the URL directory path (with trailing slash) for the plugin.
-     * 
      * @param string $path The path name.
      * @return string The URL directory path.
      */
-    public function getUrl(string $path = '')
+    public function getUrl(string $path = ''): string
     {
         return $this->url . ltrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
 
     /**
+     * setUrl method
      * Set the URL directory path (with trailing slash) for the plugin.
-     * 
      * @return object This Plugin object.
      */
-    public function setUrl()
+    public function setUrl(): object
     {
-        $this->url = rtrim(plugin_dir_url($this->plugin_file), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->url = rtrim(plugin_dir_url($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
     }
 
     /**
+     * getSlug method
      * Get the slug of the plugin.
-     * 
      * @return string The slug.
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return sanitize_title(dirname($this->basename));
     }
 
     /**
+     * getVersion method
      * Get the version of the plugin.
-     * 
      * @return string The version.
      */
-    public function getVersion()
+    public function getVersion(): string
     {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            return bin2hex(random_bytes(4));
+        }
         return $this->version;
     }
 
     /**
+     * getVersion method
      * Set the version of the plugin.
-     * 
      * @return object This Plugin object.
      */
-    public function setVersion()
+    public function setVersion(): object
     {
-        $headers = array('Version' => 'Version');
-        $file_data = get_file_data($this->plugin_file, $headers, 'plugin');
-        if (isset($file_data['Version'])) {
-            $this->version = $file_data['Version'];
+        $headers = ['Version' => 'Version'];
+        $fileData = get_file_data($this->pluginFile, $headers, 'plugin');
+        if (isset($fileData['Version'])) {
+            $this->version = $fileData['Version'];
         };
         return $this;
     }
 
     /**
+     * __call method
      * Method overloading.
      */
     public function __call(string $name, array $arguments)
     {
         if (!method_exists($this, $name)) {
-            $message = sprintf(__('Call to undefined method %1$s::%2$s', 'rrze-wp'), __CLASS__, $name);
+            $message = sprintf('Call to undefined method %1$s::%2$s', __CLASS__, $name);
             do_action(
                 'rrze.log.error',
                 $message,
-                array(
+                [
                     'class' => __CLASS__,
                     'method' => $name,
                     'arguments' => $arguments
-                )
+                ]
             );
-            if (WP_DEBUG) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
                 throw new \Exception($message);
             }
         }
