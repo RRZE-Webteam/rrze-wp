@@ -4,7 +4,7 @@ namespace RRZE\WP;
 
 defined('ABSPATH') || exit;
 
-class Helper
+class Utils
 {
     public static function debug($input, string $level = 'i')
     {
