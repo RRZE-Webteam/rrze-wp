@@ -116,7 +116,7 @@ class Plugin
      */
     public function getPath(string $path = ''): string
     {
-        return $this->directory . ltrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this->directory . ($path ? trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '');
     }
 
     /**
@@ -127,7 +127,7 @@ class Plugin
      */
     public function getUrl(string $path = ''): string
     {
-        return $this->url . ltrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this->url . ($path ? trim($path, '/') . '/' : '');
     }
 
     /**
@@ -137,7 +137,7 @@ class Plugin
      */
     public function setUrl(): object
     {
-        $this->url = rtrim(plugin_dir_url($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->url = rtrim(plugin_dir_url($this->pluginFile), '/') . '/';
         return $this;
     }
 
