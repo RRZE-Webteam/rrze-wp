@@ -4,11 +4,14 @@ namespace RRZE\WP;
 
 defined('ABSPATH') || exit;
 
-class Utils
+class Debug
 {
-    public static function debug($input, string $level = 'i')
+    public static function log($input, string $level = 'i')
     {
-        if (!WP_DEBUG) {
+        if (
+            !defined('WP_DEBUG') || !WP_DEBUG ||
+            !defined('WP_DEBUG_LOG') || !WP_DEBUG_LOG
+        ) {
             return;
         }
         if (in_array(strtolower((string) WP_DEBUG_LOG), ['true', '1'], true)) {
