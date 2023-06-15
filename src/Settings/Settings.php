@@ -43,7 +43,7 @@ class Settings
 
     public function loadTextdomain()
     {
-        $mofile = dirname(__FILE__) . '/languages/rrze-wp-settings' . get_locale() . '.mo';
+        $mofile = dirname(__FILE__) . '/languages/rrze-wp-settings-' . get_locale() . '.mo';
         load_textdomain('rrze-wp-settings', $mofile);
     }
 
