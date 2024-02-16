@@ -3,13 +3,14 @@
 namespace RRZE\WP\Settings;
 
 defined('ABSPATH') || exit;
+
 ?>
 <tr valign="top">
     <th scope="row" class="rrze-wp-form-label">
-        <label for="<?php echo $option->getIdAttribute(); ?>" class="<?php echo $option->getLabelClassAttribute(); ?>"><?php echo $option->getLabel(); ?></label>
+        <label for="<?php echo $option->getIdAttribute(); ?>" <?php echo $option->getLabelClassAttribute(); ?>><?php echo $option->getLabel(); ?></label>
     </th>
     <td class="rrze-wp-form rrze-wp-form-input">
-        <textarea name="<?php echo esc_attr($option->getNameAttribute()); ?>" id="<?php echo $option->getIdAttribute(); ?>" class="wp-settings-code-editor <?php echo $option->getInputClassAttribute(); ?>"><?php echo wp_unslash($option->getValueAttribute()); ?></textarea>
+        <input name="<?php echo esc_attr($option->getNameAttribute()); ?>" id="<?php echo $option->getIdAttribute(); ?>" type="password" value="<?php echo $option->getValueAttribute(); ?>" <?php echo $option->getInputClassAttribute(); ?>>
         <?php if ($description = $option->getArg('description')) { ?>
             <p class="description"><?php echo $description; ?></p>
         <?php } ?>

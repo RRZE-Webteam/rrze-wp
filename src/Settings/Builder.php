@@ -4,7 +4,7 @@ namespace RRZE\WP\Settings;
 
 defined('ABSPATH') || exit;
 
-class WorkBuilder
+class Builder
 {
     public array $enqueued = [];
 

@@ -6,16 +6,16 @@ defined('ABSPATH') || exit;
 
 class Worker
 {
-    protected static WorkBuilder $workBuilder;
+    protected static Builder $builder;
 
-    public static function setWorkBuilder($builder)
+    public static function setBuilder($builder)
     {
-        static::$workBuilder = $builder;
+        static::$builder = $builder;
     }
 
     public static function builder()
     {
-        return static::$workBuilder;
+        return static::$builder;
     }
 
     public static function add($handle, $callback)

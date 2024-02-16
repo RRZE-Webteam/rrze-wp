@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE\WP\Settings\Options;
+namespace RRZE\WP\Settings\Fields;
 
 defined('ABSPATH') || exit;
 
@@ -22,7 +22,7 @@ abstract class Field
 
     public function render()
     {
-        return Template::include('options/' . $this->template, ['option' => $this]);
+        return Template::include('fields/' . $this->template, ['option' => $this]);
     }
 
     public function hasError()
@@ -60,7 +60,7 @@ abstract class Field
 
     public function getIdAttribute()
     {
-        return $this->getArg('id', sanitize_title($this->getNameAttribute()));
+        return $this->getArg('id', sanitize_title(str_replace('[', '_', $this->getNameAttribute())));
     }
 
     public function getName()
@@ -68,24 +68,30 @@ abstract class Field
         return $this->getArg('name');
     }
 
+    public function getPlaceholderAttribute()
+    {
+        $placeholder = $this->getArg('placeholder') ?? null;
+
+        return $placeholder ?: null;
+    }
+
     public function getCss()
     {
         return $this->getArg('css', []);
     }
 
-
     public function getInputClassAttribute()
     {
         $class = $this->getCss()['input_class'] ?? null;
 
-        return !empty($class) ? esc_attr($class) : null;
+        return !empty($class) ? 'class="' . esc_attr($class) . '"' : null;
     }
 
     public function getLabelClassAttribute()
     {
         $class = $this->getCss()['label_class'] ?? null;
 
-        return !empty($class) ? esc_attr($class) : null;
+        return !empty($class) ? 'class="' . esc_attr($class) . '"' : null;
     }
 
     public function getNameAttribute()

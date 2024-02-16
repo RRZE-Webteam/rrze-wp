@@ -4,7 +4,7 @@ namespace RRZE\WP\Settings;
 
 defined('ABSPATH') || exit;
 
-class Settings
+class Main
 {
     public $title;
 
@@ -30,8 +30,6 @@ class Settings
 
     public function __construct($title, $slug = null)
     {
-        $this->loadTextdomain();
-
         $this->title = $title;
         $this->optionName = strtolower(str_replace('-', '_', sanitize_title($this->title)));
         $this->slug = $slug;
@@ -39,12 +37,6 @@ class Settings
         if ($this->slug === null) {
             $this->slug = sanitize_title($title);
         }
-    }
-
-    public function loadTextdomain()
-    {
-        $mofile = dirname(__FILE__) . '/languages/rrze-wp-settings-' . get_locale() . '.mo';
-        load_textdomain('rrze-wp-settings', $mofile);
     }
 
     public function setMenuParentSlug($slug)
@@ -91,9 +83,25 @@ class Settings
     public function addToMenu()
     {
         if ($this->parentSlug) {
-            add_submenu_page($this->parentSlug, $this->title, $this->getMenuTitle(), $this->capability, $this->slug, [$this, 'render'], $this->menuPosition);
+            add_submenu_page(
+                $this->parentSlug,
+                $this->title,
+                $this->getMenuTitle(),
+                $this->capability,
+                $this->slug,
+                [$this, 'render'],
+                $this->menuPosition
+            );
         } else {
-            add_menu_page($this->title, $this->getMenuTitle(), $this->capability, $this->slug, [$this, 'render'], $this->menuIcon, $this->menuPosition);
+            add_menu_page(
+                $this->title,
+                $this->getMenuTitle(),
+                $this->capability,
+                $this->slug,
+                [$this, 'render'],
+                $this->menuIcon,
+                $this->menuPosition
+            );
         }
     }
 
@@ -166,7 +174,7 @@ class Settings
     public function addSection($title, $args = [])
     {
         if (empty($this->tabs)) {
-            $tab = $this->addTab('Unnamed tab');
+            $tab = $this->addTab(__('Unnamed tab', 'rrze-wp-settings'));
         } else {
             $tab = end($this->tabs);
         }
@@ -236,15 +244,52 @@ class Settings
 
     public function render()
     {
-        Worker::setWorkBuilder(new WorkBuilder);
-
-        do_action('rrze_wp_settings_before_render_settings_page');
+        Worker::setBuilder(new Builder);
 
         Worker::enqueue();
 
         Template::include('settings-page', ['settings' => $this]);
+    }
 
-        do_action('rrze_wp_settings_after_render_settings_page');
+    public function save()
+    {
+        if (
+            !isset($_POST['rrze_wp_settings_save'])
+            || !wp_verify_nonce(
+                $_POST['rrze_wp_settings_save'],
+                'rrze_wp_settings_save_' . $this->optionName
+            )
+        ) {
+            return;
+        }
+
+        if (!current_user_can($this->capability)) {
+            wp_die(__('You do not have enough permissions to do that.', 'rrze-wp-settings'));
+        }
+
+        $currentOptions = $this->getOptions();
+        $submittedOptions = apply_filters('rrze_wp_settings_new_options', $_POST[$this->optionName] ?? [], $currentOptions);
+        $newOptions = $currentOptions;
+
+        foreach ($this->getActiveTab()->getActiveSections() as $section) {
+            foreach ($section->options as $option) {
+                $value = $submittedOptions[$option->implementation->getName()] ?? null;
+
+                $valid = $option->validate($value);
+
+                if (!$valid) {
+                    continue;
+                }
+
+                $value = apply_filters('rrze_wp_settings_new_option_' . $option->implementation->getName(), $option->sanitize($value), $option->implementation);
+
+                $newOptions[$option->implementation->getName()] = $value;
+            }
+        }
+
+        $this->updateOptions($newOptions);
+
+        $this->flash->set('success', __('Settings saved.', 'rrze-wp-settings'));
     }
 
     public function defaultOptions()
@@ -277,38 +322,9 @@ class Settings
         return $options[$option] ?? null;
     }
 
-    public function save()
+    public function updateOptions($options)
     {
-        if (!isset($_POST['rrze_wp_settings_save']) || !wp_verify_nonce($_POST['rrze_wp_settings_save'], 'rrze_wp_settings_save_' . $this->optionName)) {
-            return;
-        }
-
-        if (!current_user_can($this->capability)) {
-            wp_die(__("You don't have enough permissions to do that.", 'rrze-wp-settings'));
-        }
-
-        $currentOptions = $this->getOptions();
-        $submittedOptions = apply_filters('rrze_wp_settings_new_options', $_POST[$this->optionName] ?? [], $currentOptions);
-        $newOptions = $currentOptions;
-
-        foreach ($this->getActiveTab()->getActiveSections() as $section) {
-            foreach ($section->options as $option) {
-                $value = $submittedOptions[$option->implementation->getName()] ?? null;
-
-                $valid = $option->validate($value);
-
-                if (!$valid) {
-                    continue;
-                }
-
-                $value = apply_filters('rrze_wp_settings_new_options_' . $option->implementation->getName(), $option->sanitize($value), $option->implementation);
-
-                $newOptions[$option->implementation->getName()] = $value;
-            }
-        }
-
-        update_option($this->optionName, $newOptions);
-
-        $this->flash->set('success', __('Settings saved.', 'rrze-wp-settings'));
+        update_option($this->optionName, $options);
+        do_action('rrze_wp_settings_post_update_option', $options);
     }
 }
