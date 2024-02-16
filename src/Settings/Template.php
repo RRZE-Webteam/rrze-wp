@@ -12,16 +12,15 @@ class Template
             ${$name} = $value;
         }
 
-        $full_path = __DIR__ . "/templates/{$file}.php";
-
-        if (!file_exists($full_path)) {
+        $path = __DIR__ . "/templates/{$file}.php";
+        if (!file_exists($path)) {
             return;
         }
 
         ob_start();
 
-        include $full_path;
+        include $path;
 
-        echo apply_filters('rrze_wp_settings_template_render', ob_get_clean(), $file, $variables);
+        echo apply_filters('rrze_wp_settings_template_include', ob_get_clean(), $file, $variables);
     }
 }
