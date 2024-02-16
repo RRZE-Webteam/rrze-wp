@@ -57,25 +57,25 @@ $settings->addTab(__('General', 'textdomain'));
 The `addSection` method can be called from an instance of `Tab`. It can also be called from the `Settings` instance. Subsequently, it will be added to the last created `Tab`.
 
 ```php
-$tab->add_section(__('Section One', 'textdomain'));
+$tab->addSection(__('Section One', 'textdomain'));
 ```
 
 If sections are desired to be displayed as submenu-items, the following can be done:
 
 ```php
-$tab->add_section('Section One', ['as_link' => true]);
+$tab->addSection('Section One', ['as_link' => true]);
 ```
 
 Note that this only has an effect when there are more than one `as_link` sections.
 
 ### Option Fields
 
-To add an option, you either call the `add_option` method from an instance of `Section`. `addOption` can also be called from the `Settings` instance. The option will then be added to the last created section.
+To add an option, you either call the `addOption` method from an instance of `Section`. `addOption` can also be called from the `Settings` instance. The option will then be added to the last created section.
 
 #### Text
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'option_1',
     'label' => __('Option 1', 'textdomain')
 ]);
@@ -84,7 +84,7 @@ $section->add_option('text', [
 #### Textarea
 
 ```php
-$section->add_option('textarea', [
+$section->addOption('textarea', [
     'name' => 'option_1',
     'label' => __('Option 1', 'textdomain')
 ]);
@@ -93,7 +93,7 @@ $section->add_option('textarea', [
 #### Checkbox
 
 ```php
-$section->add_option('checkbox', [
+$section->addOption('checkbox', [
     'name' => 'option_1',
     'label' => __('Option 1', 'textdomain')
 ]);
@@ -102,7 +102,7 @@ $section->add_option('checkbox', [
 #### Checkbox Multiple
 
 ```php
-$section->add_option('checkbox-multiple', [
+$section->addOption('checkbox-multiple', [
     'name' => 'multiple_options_1',
     'label' => __('Multiple Options 1', 'textdomain'),
     'options' => [
@@ -115,7 +115,7 @@ $section->add_option('checkbox-multiple', [
 #### Radio Group
 
 ```php
-$section->add_option('radio-group', [
+$section->addOption('radio-group', [
     'name' => 'radio_group_1',
     'label' => __('Radio Group 1', 'textdomain'),
     'options' => [
@@ -128,7 +128,7 @@ $section->add_option('radio-group', [
 #### Select
 
 ```php
-$section->add_option('select', [
+$section->addOption('select', [
     'name' => 'option_1',
     'label' => __( 'Option 1', 'textdomain' ),
     'options' => [
@@ -141,7 +141,7 @@ $section->add_option('select', [
 #### Select Multiple
 
 ```php
-$section->add_option('select-multiple', [
+$section->addOption('select-multiple', [
     'name' => 'option_1',
     'label' => __('Option 1', 'textdomain'),
     'options' => [
@@ -154,7 +154,7 @@ $section->add_option('select-multiple', [
 #### Password
 
 ```php
-$section->add_option('password', [
+$section->addOption('password', [
     'name' => 'password_1',
     'label' => __('Password 1', 'textdomain')
 ]);
@@ -165,7 +165,7 @@ $section->add_option('password', [
 An option can be validated, allowing for the passing of a callback and a feedback message. Multiple validation rules can be passed as well.
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'custom_api_key',
     'label' => __('API Key', 'textdomain'),
     'validate' => [
@@ -182,7 +182,7 @@ $section->add_option('text', [
 A sanitization callback can be passed.
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'custom_api_key',
     'label' => __('API Key', 'textdomain'),
     'santitize' => fn($value) => sanitize_key($value)
@@ -194,7 +194,7 @@ $section->add_option('text', [
 #### Description
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'custom_api_key',
     'label' => __('API Key', 'textdomain'),
     'description' => __('Enter the API key here.', 'textdomain')
@@ -204,7 +204,7 @@ $section->add_option('text', [
 #### Placeholder
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'custom_api_key',
     'label' => __('API Key', 'textdomain'),
     'placeholder' => __('Enter the API key here.', 'textdomain')
@@ -214,7 +214,7 @@ $section->add_option('text', [
 #### Default value
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'custom_api_key',
     'label' => __('API Key', 'textdomain'),
     'default' => 'default_value'
@@ -224,7 +224,7 @@ $section->add_option('text', [
 #### CSS classes
 
 ```php
-$section->add_option('text', [
+$section->addOption('text', [
     'name' => 'custom_api_key',
     'label' => __('API Key', 'textdomain'),
     'css' => [
