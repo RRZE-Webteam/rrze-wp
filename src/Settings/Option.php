@@ -4,47 +4,61 @@ namespace RRZE\WP\Settings;
 
 defined('ABSPATH') || exit;
 
-use RRZE\WP\Settings\Options\{
+use RRZE\WP\Settings\Fields\{
     Checkbox,
-    Choices,
-    CodeEditor,
-    Color,
+    CheckboxMultiple,
+    Password,
+    RadioGroup,
     Select,
     SelectMultiple,
     Text,
-    Textarea,
-    WPEditor
+    Textarea
 };
 
 class Option
 {
+    /**
+     * @var Section
+     */
     public $section;
 
+    /**
+     * @var string
+     */
     public $type;
 
+    /**
+     * @var array
+     */
     public $args = [];
 
+    /**
+     * @var mixed
+     */
     public $implementation;
 
-    public function __construct($section, $type, $args = [])
+    public function __construct(Section $section, string $type, array $args = [])
     {
         $this->section = $section;
         $this->type = $type;
         $this->args = $args;
 
         $typeMap = apply_filters('rrze_wp_settings_option_type_map', [
-            'text' => Text::class,
             'checkbox' => Checkbox::class,
-            'choices' => Choices::class,
-            'textarea' => Textarea::class,
-            'wp-editor' => WPEditor::class,
-            'code-editor' => CodeEditor::class,
+            'checkbox-multiple' => CheckboxMultiple::class,
+            'password' => Password::class,
+            'radio-group' => RadioGroup::class,
             'select' => Select::class,
             'select-multiple' => SelectMultiple::class,
-            'color' => Color::class,
+            'text' => Text::class,
+            'textarea' => Textarea::class
         ]);
 
-        $this->implementation = new $typeMap[$this->type]($section, $args);
+        if (isset($typeMap[$this->type])) {
+            $this->implementation = new $typeMap[$this->type]($section, $args);
+        } else {
+            $this->implementation = null;
+        }
     }
 
     public function getArg($key, $fallback = null)
@@ -58,7 +72,7 @@ class Option
             return $this->getArg('sanitize')($value);
         }
 
-        return $this->implementation->sanitize($value);
+        return is_null($this->implementation) ?: $this->implementation->sanitize($value);
     }
 
     public function validate($value)
@@ -85,7 +99,7 @@ class Option
             return $this->getArg('validate')($value);
         }
 
-        return $this->implementation->validate($value);
+        return is_null($this->implementation) ?: $this->implementation->validate($value);
     }
 
     public function render()
@@ -100,6 +114,6 @@ class Option
             return;
         }
 
-        echo $this->implementation->render();
+        echo is_null($this->implementation) ?: $this->implementation->render();
     }
 }
