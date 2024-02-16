@@ -104,7 +104,7 @@ class Plugin
      */
     public function setDirectory(): object
     {
-        $this->directory = rtrim(plugin_dir_path($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->directory = rtrim(plugin_dir_path($this->pluginFile), '/') . '/';
         return $this;
     }
 
@@ -116,7 +116,7 @@ class Plugin
      */
     public function getPath(string $path = ''): string
     {
-        return $this->directory . ($path ? trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '');
+        return $this->directory . ($path ? trim($path, '/') . '/' : '');
     }
 
     /**
