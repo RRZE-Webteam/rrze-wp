@@ -4,7 +4,7 @@ namespace RRZE\WP\Settings;
 
 defined('ABSPATH') || exit;
 
-use RRZE\WP\Settings\Fields\{
+use RRZE\WP\Settings\Options\{
     Checkbox,
     CheckboxMultiple,
     Password,
