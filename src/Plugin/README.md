@@ -33,5 +33,3 @@ $version = $plugin->getVersion();
 - `getUrl(string $path)`: Get the URL directory path for a specific file or directory within the plugin.
 - `getSlug()`: Get the slug of the plugin.
 - `getVersion()`: Get the version of the plugin.
-
-## Example
