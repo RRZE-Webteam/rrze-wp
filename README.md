@@ -14,12 +14,12 @@ Install the latest version with
 
 ### Plugin
 
-The purpose of this library is to streamline the handling of files and directories within WordPress plugins. It offers methods to access various details about the plugin, including its file path, basename, directory, URL, version, and slug.
+The purpose of this PHP library is to streamline the handling of files and directories within WordPress plugins. It offers methods to access various details about the plugin, including its file path, basename, directory, URL, version, and slug.
 
 [Read more](src/Plugin/README.md)
 
 ### Settings
 
-This library aims to simplify the creation of WordPress plugin settings pages, reducing reliance on the Settings API or custom code. It addresses the complexity of manual HTML coding for options and the integration of tabs and sections, streamlining the process for straightforward settings page creation.
+This PHP library aims to simplify the creation of WordPress plugin settings pages, reducing reliance on the Settings API or custom code. It addresses the complexity of manual HTML coding for options and the integration of tabs and sections, streamlining the process for straightforward settings page creation.
 
 [Read more](src/Settings/README.md)
