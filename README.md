@@ -14,7 +14,7 @@ Install the latest version with
 
 ### Plugin
 
-The purpose of this PHP library is to streamline the handling of files and directories within WordPress plugins. It offers methods to access various details about the plugin, including its file path, basename, directory, URL, version, and slug.
+The purpose of this PHP library is to streamline the handling of files and directories within WordPress plugins. It offers methods to access various details about the plugin, including its file path, basename, directory, URL, slug, name, version, required WP version and required PHP version.
 
 [Read more](src/Plugin/README.md)
 
